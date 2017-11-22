@@ -26,6 +26,8 @@ class CreateFilmsTable extends Migration {
             $table->index('release_date', 'release_date_idx');
             $table->index('ticket_price', 'ticket_price_idx');
 
+            $table->unique('name');
+
             $table->timestamps();
         });
     }
