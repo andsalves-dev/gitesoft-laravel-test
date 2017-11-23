@@ -1,4 +1,4 @@
-@extends('layouts/films')
+@extends('layouts/master')
 
 @section('content')
 
