@@ -24,6 +24,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4" type="text/javascript"></script>
 
+    <script src="/js/films.js" type="text/javascript"></script>
+
     <style>
         body {
             padding: 30px 10px 20px;

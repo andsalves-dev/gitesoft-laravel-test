@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helper\FilmsCrudHelper;
 use App\Model\Film;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -32,27 +34,28 @@ class FilmsRestController extends Controller {
 
     public function store() {
         $postData = request()->post();
-        $validator = Validator::make($postData, [
-            'name' => ['required', 'max:64'],
-            'description' => ['required'],
-            'release_date' => ['required', 'regex:/^(\d{4}\-\d{2}\-\d{2})(\s\d{2}\:\d{2}\:\d{2}){0,1}$/'],
-            'rating' => ['required', 'regex:/^((([1-4])(\.\d){0,1})|(5(\.0){0,1}))$/'],
-            'ticket_price' => ['required', 'regex:/^(\d){1,5}(\.\d{1,2}){0,1}$/'],
-            'country' => ['required'],
-            'genre' => ['required'],
-            'photo' => ['required']
-        ]);
 
-        if ($validator->fails()) {
+        if (!FilmsCrudHelper::validatePostData($postData, $errors)) {
             return response()->json([
                 'message' => 'Validation error',
-                'validation_messages' => $validator->errors()
+                'validation_messages' => $errors
             ], 422);
         }
 
-        if (Film::where([['name', '=', $postData['name']]])->get()->count()) {
+        if (!isset($postData['slug'])) {
+            $postData['slug'] = FilmsCrudHelper::createSlugByName($postData['name']);
+        }
+
+        $genres = $postData['genres'];
+        unset($postData['genres']);
+
+        if (!is_array($genres)) {
+            $genres = explode(',', str_replace(' ', '', $genres));
+        }
+
+        if (Film::where([['slug', '=', $postData['slug']]])->get()->count()) {
             return response()->json([
-                'message' => sprintf("film with name '%s' already exists", $postData['name'])
+                'message' => sprintf("film with name slug '%s' already exists", $postData['name'])
             ], 409);
         }
 
@@ -66,15 +69,30 @@ class FilmsRestController extends Controller {
             ], 500);
         }
 
+        foreach ($genres as $genre) {
+            $film->genres()->attach($genre);
+        }
+
         return response()->json([
             'message' => 'Film inserted successfully',
             'data' => $film->toArray()
         ], 201);
     }
 
-    public function show($id) {
-        if ($film = Film::find($id)) {
-            return response()->json($film);
+    public function show($idOrSlug) {
+        $query = Film::query();
+
+        $query->where(function (Builder $query) use ($idOrSlug) {
+            $query->orWhere('id', $idOrSlug);
+            $query->orWhere('slug', $idOrSlug);
+        });
+
+        $film = $query->firstOr(['*'], function () {
+            return false;
+        });
+
+        if ($film) {
+            return response()->json($film->toArray());
         }
 
         return response()->json(['message' => 'Film not found'], 404);

@@ -2,9 +2,9 @@
 
 @section('content')
 
-    <div class="row" id="vue-films" xmlns:v-bind="http://www.w3.org/1999/xhtml" style="display: none"
-         xmlns:v-on="http://www.w3.org/1999/xhtml">
-        <div v-if="!loading" v-for="film in films" class="row col-sm-8" style="margin: 60px auto 20px">
+    <div class="row" id="vue-film" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+         xmlns:v-on="http://www.w3.org/1999/xhtml" style="display: none">
+        <div v-if="!loading" class="row col-sm-8" style="margin: 60px auto 20px;">
             <div class="col-md-4">
                 <img class="img-fluid" :src="film.photo" alt="Image" onerror="this.src='{{url("/img/no_image.png")}}'">
             </div>
@@ -16,7 +16,7 @@
                 </div>
                 <div class="desc">
                     <p>
-                        @{{film.description.substring(0, 150)}}...
+                        @{{film.description}}
                     </p>
                 </div>
                 <hr class="hr">
@@ -30,10 +30,21 @@
                     <span>
                         Rating: @{{film.rating}} / 5
                     </span><br>
+                    <span>
+                        Ticket Price: $ @{{film.ticket_price}}
+                    </span><br>
+                    <span>
+                        Country: @{{film.country}}
+                    </span><br>
                 </div>
             </div>
 
             <hr class="hr col-md-12">
+        </div>
+        <div class="row col-sm-12">
+            <div class="col-sm-12 text-right">
+                <a href="{{url('/films')}}" class="btn btn-primary">Back to List</a>
+            </div>
         </div>
         <div v-if="error !== null" class="row col-sm-12">
             <div class="col-sm-12">
@@ -53,31 +64,31 @@
     </div>
 
     <script>
-        const elSelector = '#vue-films';
+        const elSelector = '#vue-film';
 
-        var vueFilms = new Vue({
+        var vueFilm = new Vue({
             el: elSelector,
             data: {
                 loading: true,
-                films: [],
+                film: null,
                 error: null
             },
             methods: {
-                loadFilms: function () {
+                loadFilm: function () {
                     var self = this;
                     self.loading = true;
                     self.error = null;
 
-                    this.$http.get('/api/films').then(function (response) {
+                    this.$http.get('/api/films/{{$slug}}').then(function (response) {
                         if (response.status === 200 && typeof(response.body) !== 'undefined') {
-                            this.films = response.body;
+                            this.film = response.body;
                         } else {
-                            this.error = 'Error Loading films!';
+                            this.error = 'Error Loading film!';
                         }
 
                         self.loading = false;
                     }, function (response) {
-                        this.error = 'Error Loading films!';
+                        this.error = 'Error Loading film!';
                         self.loading = false;
                         console.error(response);
                     });
@@ -91,7 +102,7 @@
                     element.style.display = 'block';
                 }
 
-                this.loadFilms();
+                this.loadFilm();
             }
         });
     </script>

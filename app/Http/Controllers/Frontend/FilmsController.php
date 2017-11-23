@@ -10,7 +10,7 @@ class FilmsController extends Controller {
         return view('frontend/films/index');
     }
 
-    public function detail() {
-        die('detail');
+    public function detail($slug) {
+        return view('frontend/films/detail', compact('slug'));
     }
 }
