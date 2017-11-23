@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Model\Film;
 use Illuminate\Support\Facades\Validator;
 
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\Validator;
  */
 class FilmsRestController extends Controller {
 
+    /**
+     * Fetch all and also some query
+     */
     public function index() {
         $where = [];
 

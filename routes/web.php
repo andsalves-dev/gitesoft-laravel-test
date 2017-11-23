@@ -12,5 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/films');
 });
+
+Route::get('films', 'Frontend\FilmsController@index');
+Route::get('films/{slug}', 'Frontend\FilmsController@detail');

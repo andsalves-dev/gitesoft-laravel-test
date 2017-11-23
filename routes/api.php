@@ -17,4 +17,4 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::resource('films', 'FilmsRestController');
+Route::resource('films', 'Api\FilmsRestController');
