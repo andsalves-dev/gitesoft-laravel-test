@@ -21,12 +21,14 @@ class CreateFilmsTable extends Migration {
             $table->string('country', 64);
             $table->string('genre', 64);
             $table->string('photo', 200);
+            $table->string('slug', 80);
 
             $table->index('name', 'name_idx');
             $table->index('release_date', 'release_date_idx');
             $table->index('ticket_price', 'ticket_price_idx');
 
             $table->unique('name');
+            $table->unique('slug');
 
             $table->timestamps();
         });

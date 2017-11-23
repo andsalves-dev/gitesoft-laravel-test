@@ -10,7 +10,9 @@
             </div>
             <div class="col-md-8">
                 <div class="title">
-                    <h2>@{{film.name}}</h2>
+                    <a v-bind:href="'/films/' + film.slug">
+                        <h2>@{{film.name}}</h2>
+                    </a>
                 </div>
                 <div class="desc">
                     <p>
