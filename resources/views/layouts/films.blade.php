@@ -21,6 +21,9 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/vue" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4" type="text/javascript"></script>
+
     <style>
         body {
             padding: 30px 10px 20px;
