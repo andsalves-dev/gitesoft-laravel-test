@@ -52,9 +52,9 @@ To do it the right way, run:
 - The project were made in Linux, Manjaro Dist, Arch based. 
 - The APIs were made in same project. An API for films and other for comments were set in api routes.
 - The seeders include a default admin user, for first login. Username and password are "admin".
-- VueJs was used as Frontend js Library. Bootstrap were used too.
+- VueJs was used as Frontend js Library. Bootstrap was used too.
 - Home page is always /films
-- For sign up, will have a link "sign up" in Login page
+- For sign up, will have a link "sign up" on Login page
 - Any user can post comments and/or new films after register.
 - The created or most edited directories/files were:
   - /resources/views
