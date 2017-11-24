@@ -18,25 +18,25 @@ The following steps are recommended:
 
 - Configure .env file. Local file were created with this content:
 
-APP_NAME=Laravel
-APP_ENV=local
-APP_KEY=base64:bxma4xIc8IZEAEgA620VjfxOx4hSSb1hEGkzr0bxdNs=
-APP_DEBUG=true
-APP_LOG_LEVEL=debug
-APP_URL=http://localhost:8000
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=laravel_films
-DB_USERNAME=root
-DB_PASSWORD=root
+  APP_NAME=Laravel <br>
+  APP_ENV=local <br>
+  APP_KEY=base64:bxma4xIc8IZEAEgA620VjfxOx4hSSb1hEGkzr0bxdNs= <br>
+  APP_DEBUG=true <br>
+  APP_LOG_LEVEL=debug <br>
+  APP_URL=http://localhost:8000 <br>
+  
+  DB_CONNECTION=mysql <br>
+  DB_HOST=127.0.0.1 <br>
+  DB_PORT=3306 <br>
+  DB_DATABASE=laravel_films <br>
+  DB_USERNAME=root <br>
+  DB_PASSWORD=root <br>
 
 - Create the named database (Mysql, same name as in .env file): 
 
   -- CREATE DATABASE IF NOT EXISTS laravel_films;
   
-- After database created, run migrations and seeders:
+- After database created, run migrations and seeders:<br>
 -- $ php artisan migrate --seed
 
 ### Running Application
