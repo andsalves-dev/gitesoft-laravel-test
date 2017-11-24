@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration {
             $table->string('email', 128);
             $table->string('username', 128);
             $table->string('password', 128);
-            $table->string('type', 20);
+            $table->string('type', 20)->default('default');
             $table->string('status', 20)->default('active');
 
             $table->unique('email');

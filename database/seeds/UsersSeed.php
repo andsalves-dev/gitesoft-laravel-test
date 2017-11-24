@@ -18,7 +18,7 @@ class UsersSeed extends Seeder {
             'name' => 'Administrator',
             'email' => 'andsalves@alu.ufc.br',
             'username' => 'admin',
-            'password' => hash('sha256', md5('admin')),
+            'password' => password_hash('admin', PASSWORD_DEFAULT),
             'type' => 'admin',
             'status' => 'active'
         ]);

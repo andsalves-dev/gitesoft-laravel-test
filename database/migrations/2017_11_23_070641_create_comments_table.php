@@ -21,6 +21,7 @@ class CreateCommentsTable extends Migration {
             $table->string('name', 80);
             $table->integer('user_id')->nullable()->unsigned();
             $table->integer('film_id')->unsigned();
+            $table->string('status', 20)->default('active');
 
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
