@@ -47,7 +47,7 @@
     </div>
 
     <script>
-        $('#register-form').validade();
+        $('#register-form').validate();
     </script>
 
 @endsection

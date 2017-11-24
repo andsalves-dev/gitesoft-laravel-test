@@ -14,7 +14,15 @@ class UsersSeed extends Seeder {
      * @return void
      */
     public function run() {
-        DB::table('users')->insert([
+        /** @var \Illuminate\Database\Eloquent\Builder $builder */
+        $builder = DB::table('users');
+
+        if ($existent = $builder->where('id', '=', 1)) {
+            $existent->delete();
+        }
+
+        $builder->insert([
+            'id' => 1,
             'name' => 'Administrator',
             'email' => 'andsalves@alu.ufc.br',
             'username' => 'admin',

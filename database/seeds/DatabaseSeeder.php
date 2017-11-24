@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder {
     /**
@@ -12,5 +13,6 @@ class DatabaseSeeder extends Seeder {
         $this->call(GenresSeeder::class);
         $this->call(FilmsSeeder::class);
         $this->call(UsersSeed::class);
+        $this->call(CommentsSeeder::class);
     }
 }

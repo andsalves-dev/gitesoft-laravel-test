@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helper\CommentsCrudHelper;
-use App\Http\Helper\FilmsCrudHelper;
 use App\Model\Comment;
 use App\Model\Film;
 use Illuminate\Database\Eloquent\Builder;

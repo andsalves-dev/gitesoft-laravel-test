@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div class="row col-sm-12" id="vue-not-loaded">
+    <div class="row col-sm-12 vue-not-loaded">
         <img src="/img/loading.gif" height="100" alt="Loading..." style="margin: 0 auto">
     </div>
 
@@ -87,7 +87,11 @@
                 var element = document.querySelector(elSelector);
 
                 if (element) {
-                    document.getElementById('vue-not-loaded').style.display = 'none';
+                    var notLoadedPlaceholders = document.querySelectorAll('.vue-not-loaded');
+                    for (var i = 0; i < notLoadedPlaceholders.length; i++) {
+                        notLoadedPlaceholders[i].style.display = 'none';
+                    }
+
                     element.style.display = 'block';
                 }
 

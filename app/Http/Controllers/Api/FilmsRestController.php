@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Helper\FilmsCrudHelper;
 use App\Model\Film;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * @author Andsalves
@@ -29,7 +28,7 @@ class FilmsRestController extends Controller {
             }
         }
 
-        return response()->json(Film::where($where)->get());
+        return response()->json(Film::where($where)->orderBy('created_at','DESC')->get());
     }
 
     public function store() {
