@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 
 class LoginController extends Controller {
     use AuthenticatesUsers;
@@ -25,12 +26,14 @@ class LoginController extends Controller {
         $postData = request()->post();
 
         $validator = Validator::make($postData, [
-            'username' => ['required', 'regex:/^[0-9a-zA-Z-_\.]+$/'],
+            'username' => ['required', 'regex:/^[0-9a-zA-Z-_\.\@]+$/'],
             'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('auth.login')->with('error_message', $validator->errors()->getFirst());
+            /** @var MessageBag $messageBag */
+            $messageBag = $validator->errors();
+            return redirect()->route('auth.login')->with('error_message', $messageBag->getMessageBag()->first());
         }
 
         $userField = strstr($postData['username'], '@') ? 'email' : 'username';

@@ -44,6 +44,9 @@
 <body>
 <div class="flex-center position-ref full-height">
     <div class="content">
+        <section class="col-sm-12 text-left">
+            <a class="nav-link" href="{{route('films.insert')}}">Insert new film</a>
+        </section>
         <section class="col-sm-12 text-right">
             <span class="">
                 @if(Route::currentRouteName() != 'auth.login')

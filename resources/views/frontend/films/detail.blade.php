@@ -4,102 +4,172 @@
 
     <div class="row" id="vue-film" xmlns:v-bind="http://www.w3.org/1999/xhtml"
          xmlns:v-on="http://www.w3.org/1999/xhtml" style="display: none">
-        <div v-if="!loading" class="row col-sm-8" style="margin: 60px auto 20px;">
+        <div v-if="!film.loading && film.data !== null" class="row col-sm-8" style="margin: 60px auto 20px;">
             <div class="col-md-4">
-                <img class="img-fluid" :src="film.photo" alt="Image" onerror="this.src='{{url("/img/no_image.png")}}'">
+                <img class="img-fluid" :src="film.data.photo" alt="Image"
+                     onerror="this.src='{{url("/img/no_image.png")}}'">
             </div>
             <div class="col-md-8">
                 <div class="title">
-                    <a v-bind:href="'/films/' + film.slug">
-                        <h2>@{{film.name}}</h2>
-                    </a>
+                    <h2>@{{film.data.name}}</h2>
                 </div>
                 <div class="desc">
                     <p>
-                        @{{film.description}}
+                        @{{film.data.description}}
                     </p>
                 </div>
                 <hr class="hr">
                 <div class="desc">
                     <span>
-                        Release Date: @{{formatDate(new Date(film.release_date))}}
+                        Release Date: @{{formatDate(new Date(film.data.release_date))}}
                     </span><br>
                     <span>
-                        Genre(s): @{{film.genres_names.join(' / ')}}
+                        Genre(s): @{{film.data.genres_names.join(' / ')}}
                     </span><br>
                     <span>
-                        Rating: @{{film.rating}} / 5
+                        Rating: @{{film.data.rating}} / 5
                     </span><br>
                     <span>
-                        Ticket Price: $ @{{film.ticket_price}}
+                        Ticket Price: $ @{{film.data.ticket_price}}
                     </span><br>
                     <span>
-                        Country: @{{film.country}}
+                        Country: @{{film.data.country}}
                     </span><br>
                 </div>
             </div>
 
             <hr class="hr col-md-12">
         </div>
-        <div class="row col-sm-12">
-            <div class="col-sm-12 text-right">
-                <a href="{{url('/films')}}" class="btn btn-primary">Back to List</a>
-            </div>
+        <div class="col-sm-8 text-right" style="margin: 20px auto 20px;">
+            <a href="{{route('films.list')}}" class="btn btn-primary">Back to List</a>
         </div>
-        <div v-if="error !== null" class="row col-sm-12">
+
+        <div class="row col-sm-8" style="margin: 20px auto 20px;">
+            @include('frontend/films/partial/comments')
+        </div>
+
+        <div v-if="film.error !== null" class="row col-sm-12">
             <div class="col-sm-12">
-                <h4 class="text-center">@{{ error }}</h4>
+                <h4 class="text-center">@{{ film.error }}</h4>
             </div>
             <div class="col-sm-12 text-center">
-                <button v-on:click="loadFilms" class="btn btn-primary">Reload</button>
+                <button v-on:click="loadFilm" class="btn btn-primary">Reload</button>
             </div>
         </div>
-        <div v-if="loading" class="row col-sm-12">
+        <div v-if="film.loading" class="row col-sm-12">
             <img src="/img/loading.gif" height="100" alt="Loading..." style="margin: 0 auto">
         </div>
     </div>
 
-    <div class="row col-sm-12" id="vue-not-loaded">
+    <div class="row col-sm-12 vue-not-loaded">
         <img src="/img/loading.gif" height="100" alt="Loading..." style="margin: 0 auto">
     </div>
 
     <script>
-        const elSelector = '#vue-film';
+        var elSelector = '#vue-film';
 
-        var vueFilm = new Vue({
+        new Vue({
             el: elSelector,
             data: {
-                loading: true,
-                film: null,
-                error: null
+                film: {
+                    loading: true,
+                    data: null,
+                    error: null
+                },
+                comments: {
+                    loading: true,
+                    items: [],
+                    error: null,
+                    comment_text: ''
+                }
             },
             methods: {
                 loadFilm: function () {
                     var self = this;
-                    self.loading = true;
-                    self.error = null;
+                    self.film.loading = true;
+                    self.film.error = null;
 
                     this.$http.get('/api/films/{{$slug}}').then(function (response) {
                         if (response.status === 200 && typeof(response.body) !== 'undefined') {
-                            this.film = response.body;
+                            self.film.data = response.body;
+                            self.loadComments(self.film.data.id);
                         } else {
-                            this.error = 'Error Loading film!';
+                            self.film.error = 'Error Loading film!';
                         }
 
-                        self.loading = false;
+                        self.film.loading = false;
                     }, function (response) {
-                        this.error = 'Error Loading film!';
-                        self.loading = false;
+                        if (response.status === 404) {
+                            self.film.error = 'Film Not Found.';
+                        } else {
+                            self.film.error = 'Error Loading film!';
+                        }
+
+                        self.film.loading = false;
+                        console.error(response);
+                    });
+                },
+                loadComments: function (film_id) {
+                    var self = this;
+                    self.comments.loading = true;
+                    self.comments.error = null;
+
+                    if (!film_id) {
+                        film_id = self.film.data.id;
+                    }
+
+                    this.$http.get('/api/comments?film_id=' + film_id).then(function (response) {
+                        if (response.status === 200 && typeof(response.body) !== 'undefined') {
+                            self.comments.items = response.body;
+                        } else {
+                            self.comments.error = 'Error Loading comments!';
+                        }
+
+                        self.comments.loading = false;
+                    }, function (response) {
+                        self.comments.error = 'Error Loading comments!';
+                        self.comments.loading = false;
+                        console.error(response);
+                    });
+                },
+                @if (Auth::check())
+                addComment: function () {
+                    var self = this;
+                    self.comments.loading = true;
+
+                    this.$http.post('/api/comments', {
+                        'comment': self.comments.comment_text,
+                        'film_id': self.film.data.id,
+                        'name': '{{Auth::user()->name}}',
+                        'user_id': '{{Auth::user()->id}}'
+                    }).then(function (response) {
+                        if (response.status === 201 && typeof(response.body) !== 'undefined') {
+                            self.comments.comment_text = '';
+                            self.loadComments(self.film.data.id);
+                        } else {
+                            alert('Error posting your comment! ');
+                        }
+
+                        self.comments.loading = false;
+                    }, function (response) {
+                        alert('Error posting your comment! ');
+                        self.comments.loading = false;
+
                         console.error(response);
                     });
                 }
+                @endif
             },
             created: function () {
-                var element = document.querySelector(elSelector);
+                var vueElement = document.querySelector(elSelector);
 
-                if (element) {
-                    document.getElementById('vue-not-loaded').style.display = 'none';
-                    element.style.display = 'block';
+                if (vueElement) {
+                    var notLoadedPlaceholders = document.querySelectorAll('.vue-not-loaded');
+                    for (var i = 0; i < notLoadedPlaceholders.length; i++) {
+                        notLoadedPlaceholders[i].style.display = 'none';
+                    }
+
+                    vueElement.style.display = 'block';
                 }
 
                 this.loadFilm();

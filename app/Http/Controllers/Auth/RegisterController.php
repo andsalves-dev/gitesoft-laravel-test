@@ -30,11 +30,9 @@ class RegisterController extends Controller {
         }
 
         try {
-            $postData['password'] = hash('sha256', md5($postData['password']));
-
             $film = new User();
-            $film->fill(array_replace($postData, [
-                'password' => hash('sha256', md5($postData['password']))
+            $film->fill(array_merge($postData, [
+                'password' => password_hash($postData['password'], PASSWORD_DEFAULT)
             ]));
             $film->save();
 

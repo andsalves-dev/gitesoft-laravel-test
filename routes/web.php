@@ -22,7 +22,8 @@ Route::get('/login', function () {
 });
 
 Route::get('films', 'Frontend\FilmsController@index')->name('films.list');
-Route::get('films/{slug}', 'Frontend\FilmsController@detail')->name('films.item');
+Route::get('films/detail/{slug}', 'Frontend\FilmsController@detail')->name('films.item');
+Route::get('films/insert', 'Frontend\FilmsController@insert')->name('films.insert');
 
 Route::get('register', 'Auth\RegisterController@index')->name('register');
 Route::post('register/save', 'Auth\RegisterController@save')->name('register.save');

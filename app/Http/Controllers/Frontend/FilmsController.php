@@ -13,4 +13,8 @@ class FilmsController extends Controller {
     public function detail($slug) {
         return view('frontend/films/detail', compact('slug'));
     }
+
+    public function insert() {
+
+    }
 }

@@ -6,7 +6,8 @@
             <h3> Login </h3>
             <hr class="col-sm-12 hr">
 
-            <form id="register-form" enctype="multipart/form-data" action="{{route('auth.authenticate')}}" method="post">
+            <form id="register-form" enctype="multipart/form-data" action="{{route('auth.authenticate')}}"
+                  method="post">
                 <div class="form-group row">
                     <label for="input-username" class="col-10 col-form-label">Username/Email</label>
                     <div class="col-12">
@@ -24,6 +25,11 @@
                 <div class="form-group row">
                     <div class="col-10">
                         <button type="submit" class="btn btn-primary"> Login</button>
+                    </div>
+                    <div class="col-sm-12 text-right">
+                        <small>
+                            <a href="{{route('register')}}">Sign up</a>
+                        </small>
                     </div>
                 </div>
             </form>

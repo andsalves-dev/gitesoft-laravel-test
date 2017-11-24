@@ -1,4 +1,4 @@
-function formatDate(date) {
+function formatDate(date, withHours) {
     var monthNames = [
         "January", "February", "March",
         "April", "May", "June", "July",
@@ -10,5 +10,11 @@ function formatDate(date) {
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
 
-    return monthNames[monthIndex] + ' ' + day + ', ' + year;
+    var str = monthNames[monthIndex] + ' ' + day + ', ' + year;
+
+    if (withHours === true) {
+        str += ' - ' + date.getHours() + ':' + date.getMinutes();
+    }
+
+    return str;
 }
